@@ -1,0 +1,50 @@
+<!DOCTYPE html> <!-- For out interface we will use HTML and not react, react file is not used in profs project1 directory on github, yt video listed also used html and not react-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>User Registration</title>
+        <link rel="stylesheet" href="index.css"> <!--adding css via external css stylesheet-->
+    </head>
+    <body style="font-family: Arial;">
+        <h2>Register Your Account</h2>
+        <div> <!--The attribute action tells the webpage where the user input data should be sent, attribute method says how said data should be sent-->
+            <!--Our js file will go to this route-->
+        <form action="http://localhost:5050/insert" method="POST">
+            
+            <p>Your Regstration Date:</p> <p id="date"></p>
+            <input type="hidden" name="RegisterDate" id="date2">
+            <script>
+             Object = new Date();
+             Year = Object.getFullYear();
+             Month = Object.getMonth() + 1;
+             Day = Object.getDate();
+             document.getElementById("date").innerHTML = Month + "/" + Day + "/" + Year;
+             document.getElementById("date2").value = Month + "/" + Day + "/" + Year;
+            </script>
+            
+            
+            <label>User ID:</label> <!--Note that we use the value of the name attribute to send the user input data on the form to our database, IOW, name attribute needed to send data to database, NOT the id attribute (this is used for css or js)-->
+            <input type="text" name="UserID" required>
+
+            <label>Password:</label>
+            <input type="password" name="password" required>
+
+            <label>First Name:</label>
+            <input type="text" name="FirstName" required>
+
+            <label>Last Name:</label>
+            <input type="text" name="LastName" required>
+
+            <label>Age:</label>
+            <input type="number" name="Age" required>
+
+            <label>Salary:</label>
+            <input type="number" name="Salary" required>
+
+            <input type="hidden" name="LastSignInTime">
+            
+            <button>Finish</button>
+        </form>
+        </div>
+    </body>
+</html>
