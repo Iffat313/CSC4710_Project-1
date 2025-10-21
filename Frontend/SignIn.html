@@ -2,26 +2,17 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>User Registration</title>
+        <title>SignIn</title>
         <link rel="stylesheet" href="index.css"> <!--adding css via external css stylesheet-->
     </head>
     <body style="font-family: Arial;">
-        <h2>Register Your Account</h2>
+        <h2>Please Sign-In Below:</h2>
         <div> <!--The attribute action tells the webpage where the user input data should be sent, attribute method says how said data should be sent-->
             <!--Our js file will go to this route-->
-        <a href="SignIn.html">Already Exsisting Account?</a>
-        <form action="http://localhost:5050/insert" method="POST">
-
+        <form action="http://localhost:5050/verify" method="POST"> <!--Though the corresponding js app function is app.'get()', using "GET" is not good as it exposes userID and password thus injection attack-->
             
-            <p>Your Regstration Date:</p> <p id="date"></p>
-            <input type="hidden" name="RegisterDate" id="date2">
+            <input type="hidden" name="LastSignInTime" id="date2">
             <script>
-             Object = new Date();
-             Year = Object.getFullYear();
-             Month = Object.getMonth() + 1;
-             Day = Object.getDate();
-             document.getElementById("date").innerHTML = Month + "/" + Day + "/" + Year;
-             document.getElementById("date2").value = Month + "/" + Day + "/" + Year;
             </script>
             
             
@@ -30,23 +21,10 @@
 
             <label>Password:</label>
             <input type="password" name="password" required>
-
-            <label>First Name:</label>
-            <input type="text" name="FirstName" required>
-
-            <label>Last Name:</label>
-            <input type="text" name="LastName" required>
-
-            <label>Age:</label>
-            <input type="number" name="Age" required>
-
-            <label>Salary:</label>
-            <input type="number" name="Salary" required>
-
-            <input type="hidden" name="LastSignInTime">
             
             <button>Finish</button>
         </form>
+
         </div>
     </body>
 </html>

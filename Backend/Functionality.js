@@ -48,6 +48,7 @@ const app = express(); //app is an instance of the framework express. app will a
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
+//the use of app.post below is to register a new user, grab data (user input from html form) and upload it to users table via local mySQL database server
 
 app.post('/insert', (request, response) => { //we use question marks as pevention of SQL injection attacks for encryption
     const{ UserID, password, FirstName, LastName, Age, Salary, RegisterDate, LastSignInTime} = request.body;
@@ -66,6 +67,26 @@ app.post('/insert', (request, response) => { //we use question marks as peventio
 });
 
 
+//the use of app.get() is to sign in a exsisting user doing so by verifying their credientals via a scan in the users table further via local mySQL database server
+app.get('/verify', (request, response) => {
+    const{ UserID, password } = request.body;
+    const QueryVariable = 'SELECT UserID, Password FROM Users WHERE UserID = ? AND Password = ?';
+    connection.query(QueryVariable, [UserID, password], (error, result) => {
+        if(result.length == 2){ //Query output is either 2 or 0, if 2 that means user's inputted userID and password matched the database and they're truly an exsisting user
+            console.log("Success, welcome ?"); //200 is for success code
+            response.status(200).send("Success, welcome ?");
+        }
+        else if(error){
+            console.log(error);
+            response.status(500).send("There was an error in attempting to match, try again.");
+        }
+        else{
+            console.log("Wrong credintals or account DNE, try again if latter");
+            response.status(401).send("Wrong credintals or account DNE, try again if latter");
+        }
+    });
+    
+});
 
 // if we configure here directly
 app.listen(5050, 
