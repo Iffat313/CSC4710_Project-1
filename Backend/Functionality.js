@@ -1,6 +1,6 @@
 //this .js file is a backend file that acts the bridge between the frontend and local  mySQL database server where its fetching the data from frontend then forwarding the data to said database.
 
-const express = require('express') // Imports the express module, which is a web application framework for Node.js which provides functionality to do the following: It simplifies routing and handling HTTP (a set of rules we follow when trasnfering info on the internet or bteween our computer and a server) requests like /login /register /search.
+const express = require('express') // Imports the express module, which is a web application framework for Node.js which provides functionality to do the following: It simplifies routing and handling HTTP (a set of rules we follow when trasnfering info on the internet or bteween our computer and a server) REQUESTS like POST, GET, etc.
 
 const mysql = require('mysql')  //  Imports the mysql module, which allows Node.js to interact with mySQL databases.
 
@@ -40,13 +40,18 @@ connection.connect((err) => {
 //the following methods are methods used to interact with the database (server-side logic)
 
 const app = express(); //app is an instance of the framework express. app will allows us to execute the provided funcalities from express to do the above stated routes
-//creates or uploads new data by grabbing data from html doc where user input is stored to database-> app.post() -
-//read or retrieve data from database -> app.get()
-//update exsisting data in the database -> app.put()
-//delete data in the database -> app.delete()
+//creates or uploads new data by grabbing data from html doc where user input is stored to database-> app.post() -> POST REQUEST ()
+//read or retrieve only NON-SENSITIVE data from database -> app.get() -> GET REQUEST
+//update exsisting data in the database -> app.put() -> PUT REQUEST
+//delete data in the database -> app.delete() -> DELETE REQUEST
+//The value of the method attribute within the form element fo your html document needs to match the rspective http method/request: ex html -> method=POST, js -> app.post();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+
+const location = require('path');
+app.use(express.static(location.join(__dirname,"../Frontend"))); //because project folder is not in the same location as XAMPP installation (My local machine needed this alt)
+
 
 //the use of app.post below is to register a new user, grab data (user input from html form) and upload it to users table via local mySQL database server
 
@@ -56,8 +61,8 @@ app.post('/insert', (request, response) => { //we use question marks as peventio
     //below is the exception handler in order for the data that is grabbed from the html table to be populated in the users table 
     connection.query(QueryVariable, [UserID, password, FirstName, LastName, Age, Salary, RegisterDate, LastSignInTime], (error, result) => {
         if(error){
-            console.log(error);
-            response.status(500).send("Unable to populate table users");
+            console.log(error); //console.log is the message that will appear on the console
+            response.status(500).send("Unable to populate table users"); //response.status is the message that will appear on the .html page
         }
         else{
             console.log("Data successfully populated in table users");
@@ -67,14 +72,18 @@ app.post('/insert', (request, response) => { //we use question marks as peventio
 });
 
 
-//the use of app.get() is to sign in a exsisting user doing so by verifying their credientals via a scan in the users table further via local mySQL database server
-app.get('/verify', (request, response) => {
+
+
+//We WOULD use app.get() but because this deals with sensitive info, we will use 
+app.post('/verify', (request, response) => {
     const{ UserID, password } = request.body;
-    const QueryVariable = 'SELECT UserID, Password FROM Users WHERE UserID = ? AND Password = ?';
+    const QueryVariable = 'SELECT UserID, password FROM Users WHERE UserID = ? AND password = ?';
     connection.query(QueryVariable, [UserID, password], (error, result) => {
-        if(result.length == 2){ //Query output is either 2 or 0, if 2 that means user's inputted userID and password matched the database and they're truly an exsisting user
-            console.log("Success, welcome ?"); //200 is for success code
-            response.status(200).send("Success, welcome ?");
+        if(result.length > 0){ //If POST request goes through, it will run the query with the database. A successful result should be one array (UserID and Password, must be both!)
+            console.log("Success, welcome"); //200 is for success code
+            //response.status(200).send("Success, welcome");
+            //window.location.href = "MainPage.html"; <-- this won't work because you're running a Frontend command on a Backend system file 
+            response.redirect("/MainPage.html"); //Since you're utlizing express via app, use the express built in redirect tool, more appropriate. 
         }
         else if(error){
             console.log(error);
@@ -87,6 +96,7 @@ app.get('/verify', (request, response) => {
     });
     
 });
+
 
 // if we configure here directly
 app.listen(5050, 
