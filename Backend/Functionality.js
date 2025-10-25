@@ -61,12 +61,13 @@ app.post('/insert', (request, response) => { //we use question marks as peventio
     //below is the exception handler in order for the data that is grabbed from the html table to be populated in the users table 
     connection.query(QueryVariable, [UserID, password, FirstName, LastName, Age, Salary, RegisterDate, LastSignInTime], (error, result) => {
         if(error){
-            console.log(error); //console.log is the message that will appear on the console
+            console.log(error); //console.log is the message that will appear on the console (terminal)
             response.status(500).send("Unable to populate table users"); //response.status is the message that will appear on the .html page
         }
         else{
-            console.log("Data successfully populated in table users");
-            response.send("Data successfully populated in table users");
+            console.log("Data successfully populated in table users, sign in!");
+            //response.send("Data successfully populated in table users");
+             response.redirect(`/SignIn.html`);
         }
     });
 });
@@ -79,12 +80,13 @@ app.post('/verify', (request, response) => {
     const{ UserID, password } = request.body;
     const QueryVariable = 'SELECT UserID, password FROM Users WHERE UserID = ? AND password = ?';
     connection.query(QueryVariable, [UserID, password], (error, result) => {
+        const Variable = UserID;
         if(result.length > 0){ //If POST request goes through, it will run the query with the database. A successful result should be one array (UserID and Password, must be both!)
-            console.log("Success, welcome"); //200 is for success code
+            console.log(`Success! Welcome back ${Variable}`); //DONT use qoutes for js vairables, use backsticks
             //response.status(200).send("Success, welcome");
             //window.location.href = "MainPage.html"; <-- this won't work because you're running a Frontend command on a Backend system file 
-            response.redirect("/MainPage.html"); //Since you're utlizing express via app, use the express built in redirect tool, more appropriate. 
-        }
+            response.redirect(`/MainPage.html?User=${Variable}`); //Since you're utlizing express via app, use the express built in redirect tool, more appropriate. 
+        } //we need the ? in the URL when redirecting the user to the other page because URLSearchParams method in MainPage.html needs it to find User
         else if(error){
             console.log(error);
             response.status(500).send("There was an error in attempting to match, try again.");

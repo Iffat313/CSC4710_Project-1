@@ -1,1 +1,19 @@
-test
+<!DOCTYPE html> <!-- For out interface we will use HTML and not react, react file is not used in profs project1 directory on github, yt video listed also used html and not react-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>SignIn</title>
+        <link rel="stylesheet" href="index.css"> <!--adding css via external css stylesheet-->
+    </head>
+    <body style="font-family: Arial;">
+        <h2>Success! Welcome Back User:</h2> <!-- Grab the UserID from the js file via the id attribute-->
+        <p id="UserDisplay" class="pmove"></p>
+        
+        <!-- we grab the UserID via the embedded js script from the redirecting URL if sign in is succeeded.-->
+        <script>
+            const Params = new URLSearchParams(window.location.search);
+            const UserID = Params.get('User'); //const UserID is newly created variable grabbing the UserID from the URL
+            document.getElementById("UserDisplay").textContent = UserID;
+        </script>
+    </body>
+</html>
