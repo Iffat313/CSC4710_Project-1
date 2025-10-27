@@ -3,17 +3,57 @@
     <head>
         <meta charset="utf-8">
         <title>SignIn</title>
-        <link rel="stylesheet" href="index.css"> <!--adding css via external css stylesheet-->
+        <link rel="stylesheet" href="MainPage.css"> <!--adding css via external css stylesheet-->
     </head>
     <body style="font-family: Arial;">
+
         <h2>Success! Welcome Back User:</h2> <!-- Grab the UserID from the js file via the id attribute-->
         <p id="UserDisplay" class="pmove"></p>
-        
         <!-- we grab the UserID via the embedded js script from the redirecting URL if sign in is succeeded.-->
         <script>
             const Params = new URLSearchParams(window.location.search);
             const UserID = Params.get('User'); //const UserID is newly created variable grabbing the UserID from the URL
             document.getElementById("UserDisplay").textContent = UserID;
         </script>
+
+        <div>
+            <label>Discover:</label>
+            <input type="text" name="Value" id="Data">
+            <button>Search</button>
+        </div>
+
+        <table id="Table"> <!-- Main container element that contains all table related elements like <head>-->
+            <thead>
+                <tr> <!-- Defines a row within the table -->
+                    <th>UserID</th> <!-- th element is Column Name-->
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Registration Date</th>
+                    <th>Last Sign In</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+
+        <script> //this embedded js syntax is used to grab the data from the database and paste it to the html table
+            fetch("http://localhost:5050/GetData")
+            .then(response => response.json())
+            .then(data =>{
+                const TableData = document.querySelector("#Table tbody");
+                data.forEach(user => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${user.UserID}</td>
+                        <td>${user.FirstName}</td>
+                        <td>${user.LastName}</td>
+                        <td>${user.RegisterDate}</td>
+                        <td>${user.LastSignInTime}</td>
+                    `;
+                    TableData.appendChild(row);
+                });
+            })
+        </script>
+        
     </body>
 </html>

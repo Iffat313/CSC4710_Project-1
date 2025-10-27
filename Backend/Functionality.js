@@ -56,10 +56,10 @@ app.use(express.static(location.join(__dirname,"../Frontend"))); //because proje
 //the use of app.post below is to register a new user, grab data (user input from html form) and upload it to users table via local mySQL database server
 
 app.post('/insert', (request, response) => { //we use question marks as pevention of SQL injection attacks for encryption
-    const{ UserID, password, FirstName, LastName, Age, Salary, RegisterDate, LastSignInTime} = request.body;
-    const QueryVariable = 'INSERT INTO users (UserID, password, FirstName, LastName, Age, Salary, RegisterDate, lastSignInTime) VALUES (?, ?, ?, ?, ?, ?, ?, 0)';
+    const{ UserID, Password, FirstName, LastName, Age, Salary, RegisterDate, LastSignInTime} = request.body;
+    const QueryVariable = 'INSERT INTO users (UserID, Password, FirstName, LastName, Age, Salary, RegisterDate, LastSignInTime) VALUES (?, ?, ?, ?, ?, ?, ?, 0)';
     //below is the exception handler in order for the data that is grabbed from the html table to be populated in the users table 
-    connection.query(QueryVariable, [UserID, password, FirstName, LastName, Age, Salary, RegisterDate, LastSignInTime], (error, result) => {
+    connection.query(QueryVariable, [UserID, Password, FirstName, LastName, Age, Salary, RegisterDate, LastSignInTime], (error, result) => {
         if(error){
             console.log(error); //console.log is the message that will appear on the console (terminal)
             response.status(500).send("Unable to populate table users"); //response.status is the message that will appear on the .html page
@@ -67,7 +67,7 @@ app.post('/insert', (request, response) => { //we use question marks as peventio
         else{
             console.log("Data successfully populated in table users, sign in!");
             //response.send("Data successfully populated in table users");
-             response.redirect(`/SignIn.html`);
+             response.redirect(`/SignIn.html`); //redirect users to sign in portal on registration
         }
     });
 });
@@ -77,9 +77,9 @@ app.post('/insert', (request, response) => { //we use question marks as peventio
 
 //We WOULD use app.get() but because this deals with sensitive info, we will use 
 app.post('/verify', (request, response) => {
-    const{ UserID, password } = request.body;
-    const QueryVariable = 'SELECT UserID, password FROM Users WHERE UserID = ? AND password = ?';
-    connection.query(QueryVariable, [UserID, password], (error, result) => {
+    const{ UserID, Password } = request.body;
+    const QueryVariable = 'SELECT UserID, Password FROM Users WHERE UserID = ? AND Password = ?';
+    connection.query(QueryVariable, [UserID, Password], (error, result) => {
         const Variable = UserID;
         if(result.length > 0){ //If POST request goes through, it will run the query with the database. A successful result should be one array (UserID and Password, must be both!)
             console.log(`Success! Welcome back ${Variable}`); //DONT use qoutes for js vairables, use backsticks
@@ -98,6 +98,41 @@ app.post('/verify', (request, response) => {
     });
     
 });
+
+//this use of http get is to grab data from database and paste it to the html table
+app.get('/GetData', (request, response) => {
+    const QueryVariable = 'SELECT * FROM Users';
+    connection.query(QueryVariable, (error, results) => {
+        if(error){
+            console.log(error);
+            return response.status(500).send("Error in grabbing data from database to html table");
+        }
+        response.json(results); //send the data to html table via json
+    });
+});
+
+
+
+//the lines below are used to grab data from the database to table and to grab x data for the respective search the user insists 
+/*
+
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    InitalizeHTMLTable([]);
+
+});
+
+function InitalizeHTMLTable(Data){ //this function is used to load the table on the html doc with the data from the database 
+    const Table = document.querySelector("Table tbody"); //variable
+ 
+    if(Data.length == 0){ //Case 1: No data on the database? Thus, no data should be in the table
+        Table.innerHTML = "<tr><td class='no data' colspan='5'>Database Null</td></tr>";
+    }
+}
+
+*/
 
 
 // if we configure here directly

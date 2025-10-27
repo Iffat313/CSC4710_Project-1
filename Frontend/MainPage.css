@@ -1,0 +1,19 @@
+.pmove{
+    color: green;
+    position: relative;
+    left: 360px;
+    bottom: 54px;
+    font-size: 25px;
+} 
+
+table, th, td{
+    text-align: center;
+    position: relative;
+    border: 1px solid black;
+    margin-top: 30px;
+    border-collapse: collapse;
+}
+
+th{
+    padding: 5px;
+}
