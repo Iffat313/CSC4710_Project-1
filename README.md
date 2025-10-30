@@ -1,10 +1,9 @@
 # CSC4710_Project-1
-This is for our project #1
+This is for our project #1 - User Authentication System with Database Integration
 
 
 In this project, you will create a user table and then use it to register a new user and then allows the user to sign into a website. 
-User Authentication System with Database Integration
-vid: https://youtu.be/_TByT4HNyLo 
+vid: https://youtu.be/_TByT4HNyLo <-- Explanation on how this source works and features!
 
 **Project description**
 
