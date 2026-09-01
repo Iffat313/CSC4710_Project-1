@@ -2,7 +2,7 @@
 
 const express = require('express') // Imports the express module, which is a web application framework for Node.js which provides functionality to do the following: It simplifies routing and handling HTTP (a set of rules we follow when trasnfering info on the internet or bteween our computer and a server) REQUESTS like POST, GET, etc.
 /*
-Express receives requests and routes your backend code, which then uses a database driver or ORM to communicate with the database.
+Express receives requests and routes your backend code, which then uses a database driver or ORM to communicate with the database. In line 7 you declared/decided to use mysql as the database driver to communicate to the database with express
 */
 const mysql = require('mysql')  //  Imports the mysql module, which allows Node.js to interact with mySQL databases.
 
