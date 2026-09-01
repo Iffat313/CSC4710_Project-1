@@ -1,7 +1,9 @@
 //this .js file is a backend file that acts the bridge between the frontend and local  mySQL database server where its fetching the data from frontend then forwarding the data to said database.
 
 const express = require('express') // Imports the express module, which is a web application framework for Node.js which provides functionality to do the following: It simplifies routing and handling HTTP (a set of rules we follow when trasnfering info on the internet or bteween our computer and a server) REQUESTS like POST, GET, etc.
-
+/*
+Express receives requests and routes your backend code, which then uses a database driver or ORM to communicate with the database.
+*/
 const mysql = require('mysql')  //  Imports the mysql module, which allows Node.js to interact with mySQL databases.
 
 const cors = require ('cors') // Imports the cors module, which enables Cross-Origin Resource Sharing, allowing your server to handle requests from different origins.
